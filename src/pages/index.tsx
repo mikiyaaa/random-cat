@@ -1,5 +1,22 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { CLIENT_RENEG_LIMIT } from 'tls';
+
+interface CatCategory {
+  id: number,
+  name: string,
+}
+
+interface SearchCatImage {
+  breeds: string[],
+  categories: CatCategory[],
+  id: string,
+  url: string,
+  width: number,
+  height: number,
+}
+
+type SearchCatImageResponse = SearchCatImage[];
 
 const catImages: string[] = [
   "https://cdn2.thecatapi.com/images/bpc.jpg",
@@ -12,12 +29,19 @@ const getRandomImage = (): string => {
   return catImages[index];
 }
 
+const fetchCatImage = async (): Promise<SearchCatImage> => {
+  const response = await fetch("https://api.thecatapi.com/v1/images/search");
+  const result = (await response.json()) as SearchCatImageResponse;
+  return result[0];
+};
+
 const IndexPage: React.FC = () => {
 
-  const [url, setUrl] = useState("https://cdn2.thecatapi.com/images/bpc.jpg");
+  const [url, setUrl] = useState<string>("https://cdn2.thecatapi.com/images/bpc.jpg");
 
-  const handleClick = () => {
-    setUrl(getRandomImage);
+  const handleClick = async () => {
+    const image = await fetchCatImage();
+    setUrl(image.url);
   }
 
   return (
