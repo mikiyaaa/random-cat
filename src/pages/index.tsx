@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 interface CatCategory {
   id: number,
@@ -18,17 +17,6 @@ interface SearchCatImage {
 
 type SearchCatImageResponse = SearchCatImage[];
 
-const catImages: string[] = [
-  "https://cdn2.thecatapi.com/images/bpc.jpg",
-  "https://cdn2.thecatapi.com/images/eac.jpg",
-  "https://cdn2.thecatapi.com/images/6qi.jpg",
-];
-
-const getRandomImage = (): string => {
-  const index = Math.floor(Math.random() * catImages.length);
-  return catImages[index];
-}
-
 const fetchCatImage = async (): Promise<SearchCatImage> => {
   const response = await fetch("https://api.thecatapi.com/v1/images/search");
   const result = (await response.json()) as SearchCatImageResponse;
@@ -45,10 +33,10 @@ const IndexPage: React.FC = () => {
   }
 
   return (
-    <div>
+    <div style={{textAlign: 'center'}}>
       <h1>Hello, Next.js  👋</h1>
       <Image src={url} alt="cat" width={300} height={200} />
-      <button onClick={handleClick} style={{display: 'block'}}>next cat!</button>
+      <button onClick={handleClick} style={{display: 'block', margin: 'auto'}} >next cat!</button>
     </div>
   )
 }
